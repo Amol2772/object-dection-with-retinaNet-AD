@@ -21,7 +21,7 @@ RetinaNet uses a feature pyramid network to efficiently detect objects at multip
 
 # Import Libraries
 
-``import os
+`import os
 import re
 import zipfile
 
@@ -31,7 +31,7 @@ from tensorflow import keras
 
 import matplotlib.pyplot as plt
 import tensorflow_datasets as tfds
-``
+
 
 
 
