@@ -41,6 +41,27 @@ keras.utils.get_file(filename, url)
 with zipfile.ZipFile("data.zip", "r") as z_fp:
     z_fp.extractall("./")
 ```
+# 3.Implementing utility functions
+```def swap_xy(boxes):
+  
+    def convert_to_xywh(boxes):
+  
+    Returns:
+     
+    return tf.concat(
+        [(boxes[..., :2] + boxes[..., 2:]) / 2.0, boxes[..., 2:] - boxes[..., :2]],
+        axis=-1,
+    )
+
+  def convert_to_corners(boxes):
+   
+    Returns:
+     
+    return tf.concat(
+        [boxes[..., :2] - boxes[..., 2:] / 2.0, boxes[..., :2] + boxes[..., 2:] / 2.0],
+        axis=-1,
+    )
+```
 
 
 
