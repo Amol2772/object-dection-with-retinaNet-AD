@@ -20,8 +20,8 @@ RetinaNet uses a feature pyramid network to efficiently detect objects at multip
 # Instructions
 
 # Import Libraries
-
-`import os
+``
+import os
 import re
 import zipfile
 
