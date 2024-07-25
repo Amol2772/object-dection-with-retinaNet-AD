@@ -1,4 +1,4 @@
-# object-dection-with-retinaNet-AS
+# Object-Dection-With-RetinaNet-AS
 First Day of Github Flow.
 
-This is report for intership task of objext Dection with Retina
+This is report for intrship task of objext Dection with Retina
