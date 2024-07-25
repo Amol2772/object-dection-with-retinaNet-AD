@@ -8,4 +8,15 @@ Object detection models can be broadly classified into "single-stage" and "two-s
 
 RetinaNet uses a feature pyramid network to efficiently detect objects at multiple scales and introduces a new loss, the Focal loss function, to alleviate the problem of the extreme foreground-background class imbalance.
 
+# Requirements 
+* Python 3
+* Tensorflow
+* Numpy
+* Pandas
+* Matplotlib
+* Keras
+* Tensorflow Datasets
+
+
+
 
