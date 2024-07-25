@@ -776,8 +776,107 @@ for sample in val_dataset.take(2):
         detections.nmsed_scores[0][:num_detections],
     )
 ```
+# 23. Loading Tensorflow records OF DAiSEE Dataset
+```raw_dataset = tf.data.TFRecordDataset(daisee_tf_path)
+raw_dataset
+```
+# 24. Tensorflow records structure
+```import tensorflow as tf
 
+def list_record_features(tfrecords_path):
+    # Dict of extracted feature information
+    features = {}
+    # Iterate records
+    for rec in tf.data.TFRecordDataset([str(tfrecords_path)]):
+        # Get record bytes
+        example_bytes = rec.numpy()
+        # Parse example protobuf message
+        example = tf.train.Example()
+        example.ParseFromString(example_bytes)
+        # Iterate example features
+        for key, value in example.features.feature.items():
+            # Kind of data in the feature
+            kind = value.WhichOneof('kind')
+            # Size of data in the feature
+            size = len(getattr(value, kind).value)
+            # Check if feature was seen before
+            if key in features:
+                # Check if values match, use None otherwise
+                kind2, size2 = features[key]
+                if kind != kind2:
+                    kind = None
+                if size != size2:
+                    size = None
+            # Save feature data
+            features[key] = (kind, size)
+    return features
+```
+# 24. Loading DAiSEE Dataset
+```import tensorflow as tf
 
+def list_record_features(tfrecords_path):
+    # Dict of extracted feature information
+    features = {}
+    # Iterate records
+    for rec in tf.data.TFRecordDataset([str(tfrecords_path)]):
+        # Get record bytes
+        example_bytes = rec.numpy()
+        # Parse example protobuf message
+        example = tf.train.Example()
+        example.ParseFromString(example_bytes)
+        # Iterate example features
+        for key, value in example.features.feature.items():
+            # Kind of data in the feature
+            kind = value.WhichOneof('kind')
+            # Size of data in the feature
+            size = len(getattr(value, kind).value)
+            # Check if feature was seen before
+            if key in features:
+                # Check if values match, use None otherwise
+                kind2, size2 = features[key]
+                if kind != kind2:
+                    kind = None
+                if size != size2:
+                    size = None
+            # Save feature data
+            features[key] = (kind, size)
+    return features
+```
+# 25. Preprocessing of DAiSEE Dataset
+```autotune = tf.data.AUTOTUNE
+raw_dataset = raw_dataset.map(preprocess_data, num_parallel_calls=autotune)
+raw_dataset = raw_dataset.shuffle(8 * batch_size)
+raw_dataset = raw_dataset.padded_batch(
+    batch_size=batch_size, padding_values=(0.0, 1e-8, -1), drop_remainder=True
+)
+raw_dataset = raw_dataset.map(
+    label_encoder.encode_batch, num_parallel_calls=autotune
+)
+raw_dataset = raw_dataset.apply(tf.data.experimental.ignore_errors())
+raw_dataset = raw_dataset.prefetch(autotune)
+```
+# 26. Training the DAiSEE Dataset
+```# Uncomment the following lines, when training on full dataset
+# train_steps_per_epoch = dataset_info.splits["train"].num_examples // batch_size
+# val_steps_per_epoch = \
+#     dataset_info.splits["validation"].num_examples // batch_size
+
+# train_steps = 4 * 100000
+# epochs = train_steps // train_steps_per_epoch
+
+epochs = 1
+
+# Running 100 training and 50 validation steps,
+# remove `.take` when training on the full dataset
+
+model.fit(
+    raw_dataset.take(100),
+    validation_data=val_dataset.take(50),
+    epochs=epochs,
+    callbacks=callbacks_list,
+    verbose=1,
+)
+```
 
 
 
