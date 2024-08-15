@@ -1,4 +1,4 @@
-# Object-Dection-With-RetinaNet-AS
+# Object-Detecction-With-RetinaNet-AS
 
 # Introduction 
 
